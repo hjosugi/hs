@@ -1,0 +1,4 @@
+packages: .
+
+-- Nix supplies the compiler and every dependency; no Hackage index is needed.
+active-repositories: :none
