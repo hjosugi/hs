@@ -1,0 +1,12 @@
+cradle:
+  cabal:
+    - path: "./Must50DCore.hs"
+      component: "lib:must50-hs"
+    - path: "./Common"
+      component: "lib:must50-hs"
+    - path: "./Solutions"
+      component: "lib:must50-hs"
+    - path: "./app"
+      component: "exe:must50-hs"
+    - path: "./test"
+      component: "test:examples"

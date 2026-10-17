@@ -4,7 +4,38 @@ version: 0.1.0.0
 build-type: Simple
 
 library
-  exposed-modules: Must50DCore
+  exposed-modules:
+    Must50DCore
+    Solutions.MergeIntervals
+    Solutions.MeetingRoomsII
+    Solutions.NumberOfIslands
+    Solutions.StatusMessageDeduplication
+    Solutions.CourseSchedule
+    Solutions.WordLadder
+    Solutions.NetworkDelayTime
+    Solutions.LRUCache
+    Solutions.TopKFrequentElements
+    Solutions.MedianFinder
+    Solutions.LongestSubstringWithoutRepeatingCharacters
+    Solutions.ImplementTrie
+    Solutions.WordSearchII
+    Solutions.SlidingWindowMaximum
+    Solutions.WordBreak
+    Solutions.HouseRobber
+    Solutions.PartitionEqualSubsetSum
+    Solutions.LongestIncreasingSubsequence
+    Solutions.BinaryTreeMaximumPathSum
+    Solutions.DailyTemperatures
+    Solutions.CombinationSum
+    Solutions.KokoEatingBananas
+    Solutions.RedundantConnection
+    Solutions.SubarraySumEqualsK
+    Solutions.IncrementSubmatrices
+    Solutions.MinimumCostToCutOffAllLeaves
+  other-modules:
+    Common.Arrays
+    Common.Heap
+    Common.Example
   hs-source-dirs: .
   build-depends: base >= 4.14 && < 5, array, containers, hashtables
   default-language: Haskell2010

@@ -1,0 +1,22 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Haskell: run current file",
+      "type": "process",
+      "command": "nix",
+      "args": ["develop", "path:.", "--command", "runghc", "-XHaskell2010", "${file}"],
+      "options": {"cwd": "${workspaceFolder}"},
+      "problemMatcher": []
+    },
+    {
+      "label": "Haskell: test all problems",
+      "type": "process",
+      "command": "nix",
+      "args": ["run", "path:.#test"],
+      "options": {"cwd": "${workspaceFolder}"},
+      "group": {"kind": "test", "isDefault": true},
+      "problemMatcher": []
+    }
+  ]
+}

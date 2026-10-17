@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+project_root="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
+cd "$project_root"
+
+# VS Code を Nix の外から開いても、プロジェクトと同じ GHC で HLS を起動する。
+exec nix develop --no-write-lock-file "path:$project_root" \
+  --command haskell-language-server-wrapper "$@"

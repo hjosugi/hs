@@ -1,13 +1,14 @@
 module Main where
 
-import Prelude hiding (foldl')
 import Control.Monad (forM_, unless)
 import Data.List (foldl', sort, subsequences, tails)
 import Must50DCore
+import Prelude hiding (foldl')
 
 check :: (Eq a, Show a) => String -> a -> a -> IO ()
-check label expected actual = unless (expected == actual) $
-  error (label ++ ": expected " ++ show expected ++ ", got " ++ show actual)
+check label expected actual =
+  unless (expected == actual) $
+    error (label ++ ": expected " ++ show expected ++ ", got " ++ show actual)
 
 smallLists :: Int -> [a] -> [[a]]
 smallLists n alphabet = concat [sequence (replicate k alphabet) | k <- [0 .. n]]
@@ -39,10 +40,12 @@ main = do
   check "108 prefix only" False $ trieSearch "appl" trie
   check "108 prefix" True $ trieStartsWith "appl" trie
   check "108 empty prefix" True $ trieStartsWith "" trie
-  check "111 sample" ["eat", "oath"] $ sort $
-    findWords ["oaan", "etae", "ihkr", "iflv"] ["oath", "pea", "eat", "rain"]
-  check "111 restore/prune/prefix/deduplicate" ["a", "aa", "aaa", "aaaa"] $ sort $
-    findWords ["aa", "aa"] ["a", "aa", "aaa", "aaaa", "aaaaa", "aa"]
+  check "111 sample" ["eat", "oath"] $
+    sort $
+      findWords ["oaan", "etae", "ihkr", "iflv"] ["oath", "pea", "eat", "rain"]
+  check "111 restore/prune/prefix/deduplicate" ["a", "aa", "aaa", "aaaa"] $
+    sort $
+      findWords ["aa", "aa"] ["a", "aa", "aaa", "aaaa", "aaaaa", "aa"]
   check "111 no cell reuse" [] $ findWords ["ab"] ["aba"]
   check "93 sample" True $ wordBreak "leetcode" ["leet", "code"]
   check "93 no split" False $ wordBreak "catsandog" ["cats", "dog", "sand", "and", "cat"]
@@ -62,7 +65,8 @@ main = do
   check "25 sample" 4 $ minEatingSpeed [3, 6, 7, 11] 8
   check "25 large total" 1000000000 $ minEatingSpeed (replicate 10000 1000000000) 10000
   check "79 triangle" (Just (2, 3)) $ findRedundantConnection [(1, 2), (1, 3), (2, 3)]
-  check "79 path compression" (Just (1, 4)) $ findRedundantConnection [(1, 2), (2, 3), (3, 4), (1, 4), (1, 5)]
+  check "79 path compression" (Just (1, 4)) $
+    findRedundantConnection [(1, 2), (2, 3), (3, 4), (1, 4), (1, 5)]
   check "267 sample" 3 $ subarraySum [1, 2, -1, 2, 1] 3
   check "267 zeros" 3 $ subarraySum [0, 0] 0
   check "268 sample" [[1, 1, 0], [1, 2, 1], [0, 1, 1]] $
@@ -70,8 +74,10 @@ main = do
   check "268 duplicate/boundary" [[2, 2], [2, 2]] $ incrementSubmatrices 2 (replicate 2 (0, 0, 1, 1))
   check "268 no rectangles" [[0, 0], [0, 0]] $ incrementSubmatrices 2 []
   let leaf = CutNode Nothing Nothing
-      root = CutNode (Just (4, CutNode (Just (2, leaf)) (Just (3, leaf))))
-                     (Just (7, CutNode (Just (1, leaf)) Nothing))
+      root =
+        CutNode
+          (Just (4, CutNode (Just (2, leaf)) (Just (3, leaf))))
+          (Just (7, CutNode (Just (1, leaf)) Nothing))
   check "270 binary sample" 5 $ minCutLeaves (Just root)
   check "270 root leaf" 0 $ minCutLeaves (Just leaf)
   check "270 large sum" 20000000000 $ minCutNary (NaryNode (replicate 20 (1000000000, NaryNode [])))
@@ -82,27 +88,57 @@ main = do
   forM_ (smallLists 5 [-2, 0, 2]) $ \xs -> do
     let sorted = sort xs
         n = length xs
-        expected | n == 0 = Nothing
-                 | odd n = Just (fromIntegral (sorted !! (n `div` 2)))
-                 | otherwise = Just ((fromIntegral (sorted !! (n `div` 2 - 1)) +
-                                       fromIntegral (sorted !! (n `div` 2))) / 2)
+        expected
+          | n == 0 = Nothing
+          | odd n = Just (fromIntegral (sorted !! (n `div` 2)))
+          | otherwise =
+              Just
+                ( ( fromIntegral (sorted !! (n `div` 2 - 1))
+                      + fromIntegral (sorted !! (n `div` 2))
+                  )
+                    / 2
+                )
     check "52 against sorting" expected $ findMedian (foldl' (flip addNum) emptyMedianFinder xs)
 
   -- 最適化した DP・deque・prefix count を、小さい入力の全探索と照合。
   forM_ (smallLists 5 [-1, 0, 1]) $ \xs -> do
-    check "94 against subsequences" (maximum (0 : [length ys | ys <- subsequences xs,
-      and (zipWith (<) ys (drop 1 ys))])) (lengthOfLIS xs)
+    check
+      "94 against subsequences"
+      ( maximum
+          ( 0
+              : [ length ys
+                | ys <- subsequences xs
+                , and (zipWith (<) ys (drop 1 ys))
+                ]
+          )
+      )
+      (lengthOfLIS xs)
     forM_ [-2 .. 2] $ \k ->
-      check "267 against all subarrays" (length [() | i <- [0 .. length xs - 1],
-        j <- [i + 1 .. length xs], sum (take (j - i) (drop i xs)) == k]) (subarraySum xs k)
+      check
+        "267 against all subarrays"
+        ( length
+            [ ()
+            | i <- [0 .. length xs - 1]
+            , j <- [i + 1 .. length xs]
+            , sum (take (j - i) (drop i xs)) == k
+            ]
+        )
+        (subarraySum xs k)
     forM_ [1 .. length xs + 1] $ \k ->
-      check "101 against windows" [maximum (take k (drop i xs)) | i <- [0 .. length xs - k]]
+      check
+        "101 against windows"
+        [maximum (take k (drop i xs)) | i <- [0 .. length xs - k]]
         (maxSlidingWindow xs k)
-    check "21 against forward scan"
-      [if any (> t) rest then length (takeWhile (<= t) rest) + 1 else 0 |
-       (t, rest) <- zip xs (drop 1 (tails xs))] (dailyTemperatures xs)
+    check
+      "21 against forward scan"
+      [ if any (> t) rest then length (takeWhile (<= t) rest) + 1 else 0
+      | (t, rest) <- zip xs (drop 1 (tails xs))
+      ]
+      (dailyTemperatures xs)
   forM_ (smallLists 5 [1, 2, 3]) $ \xs ->
-    check "95 against subsets" (even (sum xs) && any ((== sum xs `div` 2) . sum) (subsequences xs))
+    check
+      "95 against subsets"
+      (even (sum xs) && any ((== sum xs `div` 2) . sum) (subsequences xs))
       (canPartition xs)
 
   -- 可変 API: 更新での使用順、miss、容量 0/1、既存キー上書きを確認。
@@ -131,18 +167,19 @@ main = do
   inclusive <- newMessageDeduper 10 False
   mapM (\t -> shouldPrint inclusive t "solar") [10, 20] >>= check "260 inclusive" [True, True]
   both <- newSuppressBothDeduper 10
-  released <- mapM (\(t, message) -> suppressAdd both t message)
-    [(0, "a"), (5, "b"), (10, "a"), (20, "a"), (31, "c")]
+  released <-
+    mapM
+      (\(t, message) -> suppressAdd both t message)
+      [(0, "a"), (5, "b"), (10, "a"), (20, "a"), (31, "c")]
   check "260 suppress chains" [(5, "b")] (concat released)
   suppressFlush both >>= check "260 flush" [(31, "c")]
   suppressFlush both >>= check "260 flush twice" []
 
   bit <- newFenwick2D 3
   let rectangles = [(1, 1, 2, 2), (0, 0, 1, 1), (0, 0, 2, 2)]
-  forM_ (zip [1..] rectangles) $ \(count, rectangle) -> do
+  forM_ (zip [1 ..] rectangles) $ \(count, rectangle) -> do
     fenwickAddRect bit rectangle
     let expected = incrementSubmatrices 3 (take count rectangles)
     forM_ [(r, c) | r <- [0 .. 2], c <- [0 .. 2]] $ \pos@(r, c) ->
       fenwickQuery bit pos >>= check "268 online/offline" (expected !! r !! c)
   putStrLn "All 25 problems, bonus 260, and follow-ups passed."
-
