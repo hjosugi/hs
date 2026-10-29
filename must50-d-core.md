@@ -4,8 +4,8 @@ A〜C の土台。
 
 86 以降は偏りを直すために足した型(DP、スタック、二分探索、union-find、累積和と差分配列、木 DP)。
 
-覚えるのは共通の骨組み([scripts.md](../scripts.md) R1a)と、各問の「言うこと 2 行」だけ。
-元の [must50-d-core.md](../must50-d-core.md) の目次にある 25 問と、本文中の補足 260 を Haskell に移したもの。
+覚えるのは共通の骨組み(対策ノートの scripts.md R1a)と、各問の「言うこと 2 行」だけ。
+元の must50-d-core.md(非公開の対策ノート)の目次にある 25 問と、本文中の補足 260 を Haskell に移したもの。
 
 問題文・Trace・面接スクリプトを引き継ぎ、実装に合わせて説明を調整した。
 問題ごとの解答と実行用 main は [Solutions/](Solutions/)、全問の再エクスポートは [Must50DCore.hs](Must50DCore.hs)、
@@ -15,10 +15,9 @@ A〜C の土台。
 
 ## 使い方
 
-Nix がある環境で、リポジトリ直下から:
+Nix がある環境で、このリポジトリの直下で:
 
 ```sh
-cd hs
 nix run path:.
 nix run path:.#repl
 # GHCi: mergeIntervals [(1,3),(2,6),(8,10)]

@@ -4,10 +4,9 @@ Nix があれば、GHC やライブラリの個別インストールなしで動
 
 GHC・Cabal・`hashtables`・HLS・Fourmolu を `flake.lock` で固定する。
 
-リポジトリ直下から:
+このリポジトリの直下で:
 
 ```sh
-cd hs
 nix run path:.
 ```
 
@@ -112,7 +111,7 @@ runghc Solutions/WordBreak.hs
 
 ## VS Code の Haskell 設定
 
-リポジトリ直下から `code hs` で、このディレクトリをフォルダーとして開く。
+`code .` で、このリポジトリをフォルダーとして開く。
 
 - `.vscode/settings.json`: HLS の起動と、Fourmolu による保存時の整形。
 
